@@ -11,26 +11,36 @@ import (
 )
 
 func main() {
-	// path := path.Base("/")
-
-	// file_list, _ := os.ReadDir(path)
-
 	cmd := &cli.Command{
 		Commands: []*cli.Command{
 			{
 				Name:    "getFileList",
 				Aliases: []string{"a"},
-				Usage:   "add a task to the list",
+				Usage:   "get file list in the working directory or specified directory",
 				Action: func(ctx context.Context, cmd *cli.Command) error {
 					path_args := cmd.Args().Get(0)
-					file_list, err := utils.GetFileList(path_args)
+					working_directory, _ := os.Getwd()
 
-					if err != nil {
-						fmt.Println(err)
-					}
+					if path_args == "" {
+						file_list, err := utils.GetFileList(working_directory)
 
-					for _, file := range file_list {
-						fmt.Println(file.Name())
+						if err != nil {
+							log.Fatal(err)
+						}
+
+						for _, file := range file_list {
+							fmt.Println(file.Name())
+						}
+					} else {
+						file_list, err := utils.GetFileList(path_args)
+
+						if err != nil {
+							log.Fatal(err)
+						}
+
+						for _, file := range file_list {
+							fmt.Println(file.Name())
+						}
 					}
 
 					return nil
