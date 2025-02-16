@@ -20,6 +20,7 @@ func Start(ctx context.Context, cmd *cli.Command) error {
 
 	if pathsArg != "" {
 		fmt.Printf("Organizing %s\n", pathsArg)
+		utils.Organize(pathsArg)
 	} else {
 		fmt.Printf("Organizing %s\n", workingDirectoryPath)
 		utils.Organize(workingDirectoryPath)

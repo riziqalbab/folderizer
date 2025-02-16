@@ -9,35 +9,37 @@ import (
 
 func Organize(basePath string) error {
 
-	return filepath.WalkDir(basePath, func(path string, directory os.DirEntry, err error) error {
-		basePath = strings.TrimPrefix(basePath, "./")
-		if err != nil {
-			fmt.Println(err)
-			return err
+	file_list, _ := GetFileList(basePath)
+
+	for _, file := range file_list {
+		extension := strings.TrimPrefix(strings.ToLower(filepath.Ext(file.Name())), ".")
+
+		if !file.Type().IsDir() {
+			category := GetCategory(extension)
+			if category != "other" {
+				targetDirectory := filepath.Join(basePath, category)
+
+				targetPath := filepath.Join(targetDirectory, file.Name())
+
+				fmt.Println(filepath.Join(basePath, file.Name()))
+
+				if _, err := os.Stat(targetDirectory); os.IsNotExist(err) {
+					CreateFolder(basePath, category)
+				}
+
+				err := os.Rename(filepath.Join(basePath, file.Name()), targetPath)
+
+				if err != nil {
+					return fmt.Errorf("error moving file: %w", err)
+				}
+
+				fmt.Printf("Moved %s to %s\n", file.Name(), targetPath)
+			}
+
 		}
 
-		fmt.Println(directory.Type())
+	}
 
-		extension := strings.ToLower(filepath.Ext(directory.Name()))
-		category := GetCategory(extension)
+	return nil
 
-		targetDirectory := filepath.Join(basePath, category)
-
-		targetPath := filepath.Join(targetDirectory, directory.Name())
-
-		if _, err := os.Stat(targetDirectory); os.IsNotExist(err) {
-			CreateFolder(basePath, category)
-		}
-
-		err = os.Rename(path, targetPath)
-
-		if err != nil {
-			return fmt.Errorf("error moving file: %w", err)
-		}
-
-		fmt.Printf("Moved %s to %s\n", directory.Name(), targetPath)
-
-		return nil
-
-	})
 }
