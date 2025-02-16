@@ -18,6 +18,12 @@ func main() {
 				Usage:   "get file list in the working directory or specified directory",
 				Action:  action.ListDir,
 			},
+			{
+				Name:    "test",
+				Aliases: []string{"c"},
+				Usage:   "create folder in the working directory or specified directory",
+				Action:  action.Start,
+			},
 		},
 	}
 
