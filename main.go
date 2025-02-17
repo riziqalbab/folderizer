@@ -19,6 +19,11 @@ func main() {
 				Action:  action.ListDir,
 			},
 			{
+				Name:    "set",
+				Aliases: []string{"st"},
+				Usage:   "",
+			},
+			{
 				Name:    "start",
 				Aliases: []string{"s"},
 				Usage:   "Creates folders based on file types and moves files into the appropriate folders.",
