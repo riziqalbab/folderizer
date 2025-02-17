@@ -21,7 +21,7 @@ func main() {
 			{
 				Name:    "start",
 				Aliases: []string{"s"},
-				Usage:   "create folder in the working directory or specified directory",
+				Usage:   "Creates folders based on file types and moves files into the appropriate folders.",
 				Flags: []cli.Flag{
 					&cli.StringFlag{
 						Name:    "folder_prefix",
