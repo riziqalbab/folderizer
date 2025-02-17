@@ -13,8 +13,8 @@ func main() {
 	cmd := &cli.Command{
 		Commands: []*cli.Command{
 			{
-				Name:    "getFileList",
-				Aliases: []string{"g"},
+				Name:    "list",
+				Aliases: []string{"ls"},
 				Usage:   "get file list in the working directory or specified directory",
 				Action:  action.ListDir,
 			},
@@ -22,7 +22,19 @@ func main() {
 				Name:    "start",
 				Aliases: []string{"s"},
 				Usage:   "create folder in the working directory or specified directory",
-				Action:  action.Start,
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:    "folder_prefix",
+						Aliases: []string{"f", "fnp"},
+						Usage:   "Add a first name to each folder, for example: --folder_prefix new_folder",
+					},
+					&cli.StringFlag{
+						Name:    "folder_suffix",
+						Aliases: []string{"s", "snp"},
+						Usage:   "Add a name to the folder to be created, for example: --folder_suffix new_folder",
+					},
+				},
+				Action: action.Start,
 			},
 		},
 	}
