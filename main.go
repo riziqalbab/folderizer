@@ -14,13 +14,13 @@ func main() {
 		Commands: []*cli.Command{
 			{
 				Name:    "getFileList",
-				Aliases: []string{"a"},
+				Aliases: []string{"g"},
 				Usage:   "get file list in the working directory or specified directory",
 				Action:  action.ListDir,
 			},
 			{
-				Name:    "test",
-				Aliases: []string{"c"},
+				Name:    "start",
+				Aliases: []string{"s"},
 				Usage:   "create folder in the working directory or specified directory",
 				Action:  action.Start,
 			},
