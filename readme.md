@@ -96,7 +96,7 @@ $ folderizer set
 $ folderizer st
 ```
 
-#### Flags:
+#### Required Flags:
 
 - `--file_prefix`, `-fp` → Detects a prefix in the file name.
 - `--file_suffix`, `-fs` → Detects a suffix in the file name.
