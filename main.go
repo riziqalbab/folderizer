@@ -22,6 +22,7 @@ func main() {
 				Name:    "set",
 				Aliases: []string{"st"},
 				Usage:   "",
+				Action:  action.SetAction,
 			},
 			{
 				Name:    "start",

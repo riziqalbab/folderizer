@@ -2,6 +2,7 @@ package action
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/urfave/cli/v3"
@@ -16,12 +17,13 @@ func SetAction(ctx context.Context, cmd *cli.Command) error {
 	folder_destination := cmd.String("to_folder")
 
 	if file_prefix_name == "" && file_suffix_name == "" {
-		fmt.Println("Please specify a file prefix or a file suffix. For example: folderizer set --file_prefix <file_prefix_name> --file_suffix <file_suffix_name> --to_folder <folder_destination>")
-		return nil
+		err := errors.New("please specify a file prefix or a file suffix. For example: folderizer set --file_prefix <file_prefix_name> --file_suffix <file_suffix_name> --to_folder <folder_destination>")
+		return fmt.Errorf("error occurred: %v", err)
 	}
 	if folder_destination == "" {
-		fmt.Println("Please specify a folder destination. For example: folderizer set --file_prefix <file_prefix_name> --file_suffix <file_suffix_name> --to_folder <folder_destination>")
-		return nil
+		err := errors.New("please specify a folder destination. For example: folderizer set --file_prefix <file_prefix_name> --file_suffix <file_suffix_name> --to_folder <folder_destination>")
+		return fmt.Errorf("error occurred: %v", err)
+
 	}
 	organizeSet(ctx, cmd)
 	return nil
