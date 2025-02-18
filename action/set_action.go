@@ -46,10 +46,6 @@ func organizeSet(basePath string, cmd *cli.Command) {
 	var file_suffix_name string = cmd.String("file_suffix")
 	var file_prefix_name string = cmd.String("file_prefix")
 
-	if cmd.String("file_prefix") != "" && cmd.String("file_suffix") != "" {
-
-	}
-
 	files_list, _ := utils.GetFileList(basePath)
 	// fmt.Println(file_prefix_name, file_suffix_name, folder_destination)
 	for _, file := range files_list {
