@@ -13,8 +13,13 @@ import (
 )
 
 func SetAction(ctx context.Context, cmd *cli.Command) error {
-	pathsArg := cmd.Args().Get(0)
+	arg0 := cmd.Args().Get(0)
 	workingDirectoryPath, _ := os.Getwd()
+
+	if arg0 == "contain" {
+		organizeContain(cmd.Args().Get(2), cmd)
+		return nil
+	}
 
 	file_prefix_name := cmd.String("file_prefix")
 	file_suffix_name := cmd.String("file_suffix")
@@ -27,18 +32,53 @@ func SetAction(ctx context.Context, cmd *cli.Command) error {
 	if folder_destination == "" {
 		err := errors.New("please specify a folder destination. For example: folderizer set --file_prefix <file_prefix_name> --file_suffix <file_suffix_name> --to_folder <folder_destination>")
 		return fmt.Errorf("error occurred: %v", err)
-
 	}
 
-	if pathsArg != "" {
-		fmt.Printf("Organizing %s\n", pathsArg)
-		organizeSet(pathsArg, cmd)
+	if arg0 != "" {
+		fmt.Printf("Organizing %s\n", arg0)
+		organizeSet(arg0, cmd) // Arg 0 --> base path
 	} else {
 		fmt.Printf("Organizing %s\n", workingDirectoryPath)
-		organizeSet(workingDirectoryPath, cmd)
+		organizeSet(workingDirectoryPath, cmd) // Arg 0 --> base path
 	}
 
 	return nil
+}
+
+func organizeContain(basePath string, cmd *cli.Command) {
+
+	file_prefix_name := cmd.String("file_prefix")
+	file_suffix_name := cmd.String("file_suffix")
+	folder_destination := cmd.String("to_folder")
+	file_contains_name := cmd.Args().Get(1)
+
+	fmt.Println(file_contains_name)
+
+	files_list, _ := utils.GetFileList(basePath)
+
+	for _, file := range files_list {
+
+		if !file.Type().IsDir() {
+
+			extension := filepath.Ext(file.Name())
+
+			file_name := strings.TrimSuffix(file.Name(), extension)
+
+			if (file_prefix_name != "" && strings.HasPrefix(file_name, file_prefix_name)) ||
+				(file_suffix_name != "" && strings.HasSuffix(file_name, file_suffix_name)) ||
+				(file_contains_name != "" && strings.Contains(file_name, file_contains_name)) {
+
+				targetPath := filepath.Join(basePath, folder_destination, file.Name())
+				if _, err := os.Stat(filepath.Join(basePath, folder_destination)); os.IsNotExist(err) {
+					os.Mkdir(filepath.Join(basePath, cmd.String("to_folder")), 0777)
+				}
+				os.Rename(filepath.Join(basePath, file.Name()), targetPath)
+				fmt.Println("File " + file.Name() + " has been moved to " + cmd.String("to_folder"))
+			}
+		}
+
+	}
+
 }
 
 func organizeSet(basePath string, cmd *cli.Command) {
