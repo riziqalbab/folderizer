@@ -22,7 +22,24 @@ func main() {
 				Name:    "set",
 				Aliases: []string{"st"},
 				Usage:   "",
-				Action:  action.SetAction,
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:    "file_prefix",
+						Aliases: []string{"fp"},
+						Usage:   "Detect a prefix to the file name, for example: --file_prefix new_file",
+					},
+					&cli.StringFlag{
+						Name:    "file_suffix",
+						Aliases: []string{"fs"},
+						Usage:   "Detect a suffix to the file name, for example: --file_suffix new_file",
+					},
+					&cli.StringFlag{
+						Name:    "to_folder",
+						Aliases: []string{"tf"},
+						Usage:   "Add a name to the folder to be created, for example: --to_folder new_folder",
+					},
+				},
+				Action: action.SetAction,
 			},
 			{
 				Name:    "start",

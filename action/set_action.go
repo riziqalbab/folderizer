@@ -4,13 +4,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"folderizer/utils"
+	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/urfave/cli/v3"
 )
 
 func SetAction(ctx context.Context, cmd *cli.Command) error {
-	// pathsArg := cmd.Args().Get(0)
-	// workingDirectoryPath, err := os.Getwd()
+	pathsArg := cmd.Args().Get(0)
+	workingDirectoryPath, _ := os.Getwd()
 
 	file_prefix_name := cmd.String("file_prefix")
 	file_suffix_name := cmd.String("file_suffix")
@@ -25,10 +29,51 @@ func SetAction(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("error occurred: %v", err)
 
 	}
-	organizeSet(ctx, cmd)
+
+	if pathsArg != "" {
+		fmt.Printf("Organizing %s\n", pathsArg)
+		organizeSet(pathsArg, cmd)
+	} else {
+		fmt.Printf("Organizing %s\n", workingDirectoryPath)
+		organizeSet(workingDirectoryPath, cmd)
+	}
+
 	return nil
 }
 
-func organizeSet(ctx context.Context, cmd *cli.Command) {
+func organizeSet(basePath string, cmd *cli.Command) {
+
+	var file_suffix_name string = cmd.String("file_suffix")
+	var file_prefix_name string = cmd.String("file_prefix")
+
+	if cmd.String("file_prefix") != "" && cmd.String("file_suffix") != "" {
+
+	}
+
+	files_list, _ := utils.GetFileList(basePath)
+	// fmt.Println(file_prefix_name, file_suffix_name, folder_destination)
+	for _, file := range files_list {
+
+		if !file.Type().IsDir() {
+
+			extension := filepath.Ext(file.Name())
+
+			file_name := strings.TrimSuffix(file.Name(), extension)
+
+			if (file_prefix_name != "" && strings.HasPrefix(file_name, file_prefix_name)) ||
+				(file_suffix_name != "" && strings.HasSuffix(file_name, file_suffix_name)) {
+
+				targetPath := filepath.Join(basePath, cmd.String("to_folder"), file.Name())
+				if _, err := os.Stat(filepath.Join(basePath, cmd.String("to_folder"))); os.IsNotExist(err) {
+					os.Mkdir(filepath.Join(basePath, cmd.String("to_folder")), 0777)
+				}
+
+				os.Rename(filepath.Join(basePath, file.Name()), targetPath)
+				fmt.Println("File " + file.Name() + " has been moved to " + cmd.String("to_folder"))
+
+			}
+		}
+
+	}
 
 }
