@@ -1,0 +1,2 @@
+folderizer set --file_prefix <file_prefix_name> --file_suffix <file_suffix_name> --to_folder <folder_destination> 
+
