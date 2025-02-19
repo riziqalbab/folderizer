@@ -17,7 +17,15 @@ func SetAction(ctx context.Context, cmd *cli.Command) error {
 	workingDirectoryPath, _ := os.Getwd()
 
 	if arg0 == "contain" {
-		organizeContain(cmd.Args().Get(2), cmd)
+
+		if cmd.Args().Get(2) != "" {
+			fmt.Printf("Organizing %s\n", cmd.Args().Get(2))
+			organizeContain(cmd.Args().Get(2), cmd)
+		} else {
+			fmt.Printf("Organizing %s\n", workingDirectoryPath)
+			organizeContain(workingDirectoryPath, cmd)
+		}
+
 		return nil
 	}
 
@@ -51,8 +59,6 @@ func organizeContain(basePath string, cmd *cli.Command) {
 	file_suffix_name := cmd.String("file_suffix")
 	folder_destination := cmd.String("to_folder")
 	file_contains_name := cmd.Args().Get(1)
-
-	fmt.Println(file_contains_name)
 
 	files_list, _ := utils.GetFileList(basePath)
 
