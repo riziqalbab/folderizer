@@ -9,6 +9,7 @@
   - [List Files (`list` / `ls`)](#1-list-files-list--ls)
   - [Create Folders and Organize Files (`start` / `s`)](#2-create-folders-and-organize-files-start--s)
   - [Move Files to Destination Folder (`set` / `st`)](#3-move-files-to-destination-folder-set--st)
+  - [Move Files Containing a Specific String (`set contain`)](#4-move-files-containing-a-specific-string-set-contain)
 - [Contribution](#contribution)
 - [License](#license)
 
@@ -96,7 +97,7 @@ $ folderizer set
 $ folderizer st
 ```
 
-#### Flags:
+#### Required Flags:
 
 - `--file_prefix`, `-fp` → Detects a prefix in the file name.
 - `--file_suffix`, `-fs` → Detects a suffix in the file name.
@@ -127,5 +128,48 @@ data_final.csv
 data_raw.csv
 ```
 
+### 4. Move Files Containing a Specific String (`set contain`)
+
+Used to move files that contain a specific string in their name to a destination folder.
+
+
+#### Optional Flags:
+
+- `--file_prefix`, `-fp` → Detects a prefix in the file name.
+- `--file_suffix`, `-fs` → Detects a suffix in the file name.
+- `--to_folder`, `-tf` → Specifies the destination folder for matching files.
+
+
+
+```sh
+$ folderizer set contain <file_contain_string> <path> --to_folder <folder_destination>
+```
+
+**Example Usage:**
+
+Assume the following files exist:
+```
+project_report_final.docx
+project_report_draft.docx
+meeting_notes_2023.pdf
+meeting_notes_2024.pdf
+```
+
+Running the following command:
+```sh
+$ folderizer set contain report ./ --to_folder reports
+```
+
+Will produce:
+```
+reports/
+  ├── project_report_final.docx
+  ├── project_report_draft.docx
+
+meeting_notes_2023.pdf
+meeting_notes_2024.pdf
+```
+
 ## Contribution
 If you want to contribute, feel free to submit a pull request or open an issue in the repository.
+

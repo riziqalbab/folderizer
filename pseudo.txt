@@ -1,2 +1,4 @@
 folderizer set --file_prefix <file_prefix_name> --file_suffix <file_suffix_name> --to_folder <folder_destination> 
 
+
+folderizer set contain <file_contain_string> <path> --to_folder <folder_destination>
